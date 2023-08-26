@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main_gui.qml</file>
+        <file>LoginPage/LoginPage.qml</file>
+        <file>SharedComponents/InputField.qml</file>
+        <file>Controllers/SwitchPagesController.qml</file>
+        <file>ClientPage/ClientPage.qml</file>
+        <file>ClientPage/ChatListView.qml</file>
+        <file>ClientPage/ChatBlock.qml</file>
+        <file>ClientPage/CorrespondenceScene.qml</file>
+        <file>ClientPage/InputMessageField.qml</file>
+        <file>ClientPage/Message.qml</file>
+        <file>ClientPage/CorrespondenceView.qml</file>
+        <file>LoginPage/SignUpPage.qml</file>
+        <file>LoginPage/SignUpPage.qml</file>
+    </qresource>
+</RCC>
