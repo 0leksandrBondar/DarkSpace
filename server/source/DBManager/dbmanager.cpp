@@ -1,29 +1,41 @@
 #include "dbmanager.h"
+
 #include "ClientData/clientdata.h"
 
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 
-
-
-DBManager::DBManager(QObject* parent)
+DBManager::DBManager(QObject* parent) : _db{new QSqlDatabase(QSqlDatabase::addDatabase(QStringLiteral("QSQLITE")))}
 {
+	_db->setDatabaseName(QStringLiteral("dataBase.db"));
+	QSqlQuery query(*_db);
+
+	if (!_db->open())
+	{
+		qWarning() << QStringLiteral("Database not open. Error: ") << _db->lastError().text();
+	}
+	else
+	{
+		query.exec(
+			QStringLiteral("CREATE TABLE IF NOT EXISTS Clients (id INTEGER PRIMARY KEY, Login, password TEXT"
+						   "TEXT, userName TEXT)"));
+	}
 }
 
-bool DBManager::addClientToDataBase(const ClientData& data)
+bool DBManager::addClientToDataBase(const ClientData* data)
 {
 	QSqlQuery insertQuery(*_db);
 
-	const QString login = data.signInData().first;
-	const QString password = data.signInData().second;
-	const QString userName = data.userName();
+	const QString login = data->signUpData().first;
+	const QString password = data->signUpData().second;
+	const QString userName = data->userName();
 
 	const bool clientExist = isUserExistInDataBase(login);
 
 	if (clientExist)
 	{
-		return true;
+		return false;
 	}
 
 	insertQuery.prepare(

@@ -2,7 +2,7 @@
 
 #include <QString>
 
-enum class ClientDataType
+enum class ClientDataType : int
 {
 	Undefined = -1,
 	MessageType,
@@ -20,16 +20,26 @@ public:
 
 	[[nodiscard]] QString userName() const;
 	[[nodiscard]] ClientDataType clientDataType() const;
+	[[nodiscard]] bool isSingUpRequestSuccessful() const;
+	[[nodiscard]] bool isSingInRequestSuccessful() const;
 	[[nodiscard]] std::pair<QString, QString> signInData() const;
+	[[nodiscard]] std::pair<QString, QString> signUpData() const;
 	[[nodiscard]] std::pair<QString, QString> textMessageData() const;
+
+	void setSignUpRequestStatus(bool status);
+	void setSignInRequestStatus(bool status);
 
 	void setUserName(const QString& newUsername);
 	void setClientDataType(ClientDataType dataType);
+	void setSignUpData(const std::pair<QString, QString>& newSignInData);
 	void setSignInData(const std::pair<QString, QString>& newSignInData);
 	void setTextMessageData(const std::pair<QString, QString>& newTextMessageData);
 
 private:
 	QString _userName;
+
+	bool _singUpRequestStatus{false};
+	bool _singInRequestStatus{false};
 
 	std::pair<QString, QString> _signUpData;
 	std::pair<QString, QString> _signInData;

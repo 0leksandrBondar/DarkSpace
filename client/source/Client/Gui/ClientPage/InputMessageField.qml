@@ -19,7 +19,7 @@ Rectangle
         enabled: !messageField.isInputEmpty
         onClicked:
         {
-            console.log("dfsadfasdfasdfasdf")
+            console.log("Send button clicked")
             clientClass.fillMessageData(textField.text)
             createNewMessage(textField.text, qsTr("You"))
             textField.text = placeholderText.text
@@ -63,5 +63,5 @@ Rectangle
             else if (textField.text.length === 0)
                 placeholderText.text = "Enter text ...";
         }
-   }
+    }
 }

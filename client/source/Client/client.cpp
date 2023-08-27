@@ -1,5 +1,6 @@
 #include "client.h"
 
+#include <QDebug>
 #include <QTcpSocket>
 
 Client::Client() : _socket{new QTcpSocket(this)}
@@ -15,61 +16,82 @@ void Client::onRedyRead()
 	QDataStream input(_socket);
 	if (input.status() == QDataStream::Ok)
 	{
-		input >> _messageData;
-		emit getMessageFromServer(_messageData.textMessageData().first, _messageData.userName());
+		input >> _dataFromServer;
+		ClientDataType clientDataType = _dataFromServer.clientDataType();
+
+		processingClientDataFromServer(clientDataType);
 	}
 }
 
-void Client::sendMessageDataToServer(ClientData& messageData)
-{
-	QByteArray data;
-	QDataStream output(&data, QIODevice::WriteOnly);
-
-	messageData.setClientDataType(ClientDataType::MessageType);
-
-	output << messageData;
-
-	_socket->write(data);
-}
-
-void Client::sendSignInData(const QString& login, const QString& password)
+void Client::fillSignInData(const QString& login, const QString& password)
 {
 	ClientData data;
 
 	data.setUserName(_username);
 	data.setSignInData({login, password});
 	data.setClientDataType(ClientDataType::SignInType);
-	sendMessageDataToServer(data);
+
+	sendClientDataToServer(data);
 }
 
-void Client::sendSignUpData(const QString& login, const QString& password)
+void Client::fillSignUpData(const QString& login, const QString& password, const QString& userName)
 {
-	_messageData.setClientDataType(ClientDataType::SignUpType);
+	ClientData clientData;
+
+	clientData.setUserName(userName);
+	clientData.setClientDataType(ClientDataType::SignUpType);
+	clientData.setSignUpData({login, password});
+
+	sendClientDataToServer(clientData);
 }
 
 void Client::fillMessageData(const QString& text)
 {
-	QByteArray data;
-	QDataStream output(&data, QIODevice::WriteOnly);
+	ClientData clientData;
 
-	_messageData.setUserName(_username);
-	_messageData.setTextMessageData({text, _username});
-	_messageData.setClientDataType(ClientDataType::MessageType);
-	output << _messageData;
-
-	_socket->write(data);
+	clientData.setUserName(_username);
+	clientData.setTextMessageData({text, clientData.userName()});
+	clientData.setClientDataType(ClientDataType::MessageType);
+	sendClientDataToServer(clientData);
 }
 
-void Client::sendMessageData(const QString& text)
+void Client::sendClientDataToServer(const ClientData& data)
 {
-}
+	QByteArray byteArray;
+	QDataStream output(&byteArray, QIODevice::WriteOnly);
+	output << data;
 
-QString Client::username() const
-{
-	return _username;
+	_socket->write(byteArray);
 }
 
 void Client::setUsername(const QString& newUsername)
 {
 	_username = newUsername;
+}
+
+void Client::processingClientDataFromServer(ClientDataType type)
+{
+	qDebug() << "type = " << static_cast<int>(type);
+	switch (type)
+	{
+		case ClientDataType::MessageType:
+		{
+			emit getMessageFromServer(_dataFromServer.textMessageData().first, _dataFromServer.userName());
+			break;
+		}
+		case ClientDataType::SignUpType:
+		{
+			emit recivedSignUpRequestStatus(_dataFromServer.isSingUpRequestSuccessful());
+			break;
+		}
+		case ClientDataType::SignInType:
+		{
+			emit recivedSignInRequestStatus(_dataFromServer.isSingInRequestSuccessful());
+			break;
+		}
+		case ClientDataType::Undefined:
+		{
+			break;
+		}
+	}
 }

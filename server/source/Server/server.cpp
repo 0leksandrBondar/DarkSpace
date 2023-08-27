@@ -1,12 +1,11 @@
 #include "server.h"
 
 #include "dbmanager.h"
-#include "ClientData/clientdata.h"
 
 #include <QDebug>
 #include <QTcpSocket>
 
-Server::Server() : _db{new DBManager(this)}, _socket{new QTcpSocket(this)}
+Server::Server() : _db{new DBManager(this)}, _dataFromClient{new ClientData}
 {
 	if (listen(QHostAddress::AnyIPv4, 2023))
 	{
@@ -14,8 +13,13 @@ Server::Server() : _db{new DBManager(this)}, _socket{new QTcpSocket(this)}
 	}
 	else
 	{
-		qDebug() << "Server does't start listen";
+		qDebug() << "Server doesn't start listen";
 	}
+}
+
+Server::~Server()
+{
+	delete _dataFromClient;
 }
 
 void Server::onReadyRead()
@@ -23,33 +27,25 @@ void Server::onReadyRead()
 	_socket = (QTcpSocket*) sender();
 	QDataStream input(_socket);
 
-	if (input.status() == QDataStream::Ok)
+	if (input.status() != QDataStream::Ok)
 	{
-		ClientData dataFromClient;
-
-		input >> dataFromClient;
-
-		if (dataFromClient.clientDataType() == ClientDataType::MessageType)
-		{
-			qDebug() << "client message " << dataFromClient.textMessageData().first << " " << dataFromClient.userName();
-			sendToClient(dataFromClient);
-		}
+		return;
 	}
-	else
-	{
-		qDebug() << "Server read Error";
-	}
+
+	input >> *_dataFromClient;
+
+	processingClientDataFromClient();
 }
 
-void Server::sendToClient(const ClientData& data)
+void Server::sendToClient(const ClientData* data)
 {
 	_data.clear();
 	QDataStream output(&_data, QIODevice::WriteOnly);
-	output << data;
+	output << *data;
 
 	for (auto* socket : qAsConst(_sockets))
 	{
-		if (socket != _socket)
+		if (socket != _socket || _dataFromClient->clientDataType() != ClientDataType::MessageType)
 		{
 			socket->write(_data);
 		}
@@ -65,4 +61,52 @@ void Server::incomingConnection(qintptr socketDescriptor)
 	_sockets.push_back(_socket);
 
 	qDebug() << "client is connected to server = " << socketDescriptor;
+}
+
+void Server::processingClientDataFromClient()
+{
+	const auto clientDataType = static_cast<ClientDataType>(_dataFromClient->clientDataType());
+
+	switch (clientDataType)
+	{
+		case ClientDataType::MessageType:
+		{
+			processingMessageType();
+			break;
+		}
+		case ClientDataType::SignUpType:
+		{
+			processingSingUpType();
+			break;
+		}
+		case ClientDataType::SignInType:
+		{
+			processingSingInType();
+			break;
+		}
+		case ClientDataType::Undefined:
+		{
+			break;
+		}
+	}
+}
+
+void Server::processingMessageType()
+{
+	sendToClient(_dataFromClient);
+}
+
+void Server::processingSingUpType()
+{
+	const bool isClientAdded = _db->addClientToDataBase(_dataFromClient);
+	_dataFromClient->setSignUpRequestStatus(isClientAdded);
+	sendToClient(_dataFromClient);
+}
+
+void Server::processingSingInType()
+{
+	const QString login = _dataFromClient->signInData().first;
+	const bool isClientExist = _db->isUserExistInDataBase(login);
+	_dataFromClient->setSignInRequestStatus(isClientExist);
+	sendToClient(_dataFromClient);
 }
