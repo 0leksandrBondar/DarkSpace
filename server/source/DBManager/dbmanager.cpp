@@ -31,7 +31,7 @@ bool DBManager::addClientToDataBase(const ClientData* data)
 	const QString password = data->signUpData().second;
 	const QString userName = data->userName();
 
-	const bool clientExist = isUserExistInDataBase(login);
+	const bool clientExist = isUserExistInDataBase(userName);
 
 	if (clientExist)
 	{

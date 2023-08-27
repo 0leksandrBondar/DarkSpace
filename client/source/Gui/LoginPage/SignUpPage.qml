@@ -50,7 +50,6 @@ Rectangle {
         anchors.top: password.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: mainRect.horizontalCenter
-        echoMode: TextInput.Password
         customPlaceholderText: "Enter username"
     }
     Button {

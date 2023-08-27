@@ -6,65 +6,68 @@ import "../ClientPage" as ClientPageFolder
 
 import ClientSide 1.0
 
-StackView
-{
+StackView {
     id: stackPagesView
     anchors.fill: parent
     initialItem: logInPage
 
-    Client
-    {
+    Client {
         id: clientClass
     }
 
-    Component
-    {
+    Component {
         id: logInPage
-        Item
-        {
-            LoginPageFolder.LoginPage
-            {
+        Item {
+            LoginPageFolder.LoginPage {
+                id: login
                 width: mainWindow.width
                 height: mainWindow.height
-                onSignInRequest:
-                {
-                    stackPagesView.push(clientPage)
-                }
-                onSignUpRequest:
-                {
+                onSignUpRequest: {
                     stackPagesView.push(signUpPage)
                 }
             }
         }
     }
 
-    Component
-    {
+    Component {
         id: signUpPage
-        Item
-        {
-            LoginPageFolder.SignUpPage
-            {
+        Item {
+            LoginPageFolder.SignUpPage {
                 width: mainWindow.width
                 height: mainWindow.height
                 anchors.left: mainWindow.left
-                onBackClicked:
-                {
+                onBackClicked: {
                     stackPagesView.pop()
                 }
             }
         }
     }
-    Component
-    {
+    Component {
         id: clientPage
-        Item
-        {
-            ClientPageFolder.ClientPage
-            {
+        Item {
+            ClientPageFolder.ClientPage {
                 width: mainWindow.width
                 height: mainWindow.height
                 anchors.left: mainWindow.left
+            }
+        }
+    }
+
+    Connections {
+        target: clientClass
+
+        function onRecivedSignUpRequestStatus(status) {
+            console.log(" QML = onRecivedSignUpRequestStatus")
+            if (status) {
+                console.log("SingUp request is successful! Welcome")
+                stackPagesView.push(clientPage)
+            }
+        }
+
+        function onRecivedSignInRequestStatus(status) {
+            if (status) {
+                console.log("SingIn request is successful! Welcome")
+                stackPagesView.push(clientPage)
             }
         }
     }

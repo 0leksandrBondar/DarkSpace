@@ -45,7 +45,12 @@ void Server::sendToClient(const ClientData* data)
 
 	for (auto* socket : qAsConst(_sockets))
 	{
-		if (socket != _socket || _dataFromClient->clientDataType() != ClientDataType::MessageType)
+		// TODO: optimize it
+		if (socket == _socket && _dataFromClient->clientDataType() != ClientDataType::MessageType)
+		{
+			socket->write(_data);
+		}
+		if (socket != _socket && _dataFromClient->clientDataType() == ClientDataType::MessageType)
 		{
 			socket->write(_data);
 		}
@@ -107,6 +112,7 @@ void Server::processingSingInType()
 {
 	const QString login = _dataFromClient->signInData().first;
 	const bool isClientExist = _db->isUserExistInDataBase(login);
+
 	_dataFromClient->setSignInRequestStatus(isClientExist);
 	sendToClient(_dataFromClient);
 }
