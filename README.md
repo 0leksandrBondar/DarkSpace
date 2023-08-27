@@ -24,8 +24,6 @@ Link to the repository with the server: https://github.com/0leksandrBondar/DarkS
 
 # Appearance
 
-![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/3ac0cb34-54d2-46f8-a624-daf1f26b559e)
+![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/11fdfd92-a5a3-489a-bf37-cb5e9ad0252b)
 
-![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/c858b003-e1a8-47df-ad2b-c14af2b35e06)
-
-![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/d3847a46-8cde-4097-9912-ff70a6d8aeeb)
+![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/f90f427f-600b-47dd-abf3-f7928db6f027)
