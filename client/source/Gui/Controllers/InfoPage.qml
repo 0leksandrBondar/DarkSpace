@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls 2.15
 
+//TODO: Move this component to separate directory
+
 Rectangle {
     id: mainRect
     anchors.fill: parent
