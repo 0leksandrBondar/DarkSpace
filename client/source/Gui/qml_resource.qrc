@@ -4,6 +4,7 @@
         <file>LoginPage/LoginPage.qml</file>
         <file>SharedComponents/InputField.qml</file>
         <file>Controllers/SwitchPagesController.qml</file>
+        <file>Controllers/InfoPage.qml</file>
         <file>ClientPage/ClientPage.qml</file>
         <file>ClientPage/ChatListView.qml</file>
         <file>ClientPage/ChatBlock.qml</file>

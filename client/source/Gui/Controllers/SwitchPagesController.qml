@@ -14,7 +14,17 @@ StackView {
     Client {
         id: clientClass
     }
-
+    Component {
+        id: wrongPage
+        Item {
+            InfoPage {
+                id: wrong
+                onOkClicked: {
+                    stackPagesView.pop()
+                }
+            }
+        }
+    }
     Component {
         id: logInPage
         Item {
@@ -61,6 +71,8 @@ StackView {
             if (status) {
                 console.log("SingUp request is successful! Welcome")
                 stackPagesView.push(clientPage)
+            } else {
+                stackPagesView.push(wrongPage)
             }
         }
 
@@ -68,6 +80,8 @@ StackView {
             if (status) {
                 console.log("SingIn request is successful! Welcome")
                 stackPagesView.push(clientPage)
+            } else {
+                stackPagesView.push(wrongPage)
             }
         }
     }
