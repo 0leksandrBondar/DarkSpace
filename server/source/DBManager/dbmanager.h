@@ -11,7 +11,7 @@ class DBManager : public QObject
 public:
 	explicit DBManager(QObject* parent = nullptr);
 
-	bool addClientToDataBase(const ClientData& data);
+	bool addClientToDataBase(const ClientData* data);
 	bool isUserExistInDataBase(const QString& login);
 
 private:

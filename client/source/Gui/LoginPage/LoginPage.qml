@@ -3,52 +3,45 @@ import QtQuick.Controls 2.15
 
 import "../SharedComponents" as ShredCompFolder
 
-Rectangle
-{
+Rectangle {
     id: mainRect
 
     signal signInRequest();
     signal signUpRequest();
 
-    // TODO: fix later
-    Image
-    {
+    Image {
         id: loginPageBackground
-        source: "qrc:/images/DarkSpace.jpg"
+        source: "qrc:/images/darkSpace.jpg"
         anchors.fill: parent
         fillMode: loginPageBackground.fillMode
     }
 
-    ShredCompFolder.InputField
-    {
-        id: email       
+    ShredCompFolder.InputField {
+        id: email
         anchors.top: mainRect.top
         anchors.topMargin: 20
-        anchors.horizontalCenter:  mainRect.horizontalCenter
+        anchors.horizontalCenter: mainRect.horizontalCenter
         customPlaceholderText: "Enter login"
     }
 
-    ShredCompFolder.InputField
-    {
+    ShredCompFolder.InputField {
         id: password
         anchors.top: email.bottom
         anchors.topMargin: 10
-        anchors.horizontalCenter:  mainRect.horizontalCenter
+        anchors.horizontalCenter: mainRect.horizontalCenter
         echoMode: TextInput.Password
         customPlaceholderText: "Enter password"
     }
 
-    ShredCompFolder.InputField
-    {
+    ShredCompFolder.InputField {
         id: userName
         anchors.top: password.bottom
         anchors.topMargin: 10
-        anchors.horizontalCenter:  mainRect.horizontalCenter
+        anchors.horizontalCenter: mainRect.horizontalCenter
         customPlaceholderText: "Enter username"
     }
 
-    Button
-    {
+    Button {
         id: signInButtom
         width: parent.width / 3
         height: 50
@@ -56,12 +49,11 @@ Rectangle
         anchors.rightMargin: 20
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
-        anchors.right:  mainRect.horizontalCenter
+        anchors.right: mainRect.horizontalCenter
         onClicked: signInRequest()
     }
 
-    Button
-    {
+    Button {
         id: signUpButtom
         width: parent.width / 3
         height: 50
@@ -69,16 +61,16 @@ Rectangle
         anchors.leftMargin: 20
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
-        anchors.left:  mainRect.horizontalCenter
+        anchors.left: mainRect.horizontalCenter
         onClicked: signUpRequest()
     }
 
-    Connections
-    {
+    Connections {
         target: mainRect
-        function onSignInRequest()
-        {
+
+        function onSignInRequest() {
             clientClass.setUsername(userName.text)
+            clientClass.fillSignInData(email.text, password.text)
         }
     }
 }

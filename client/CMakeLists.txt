@@ -6,5 +6,4 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_subdirectory(source/program)
-add_subdirectory(source/Client)
+add_subdirectory(source)

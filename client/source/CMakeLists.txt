@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 set(SOURCES
+        main.cpp
         client.cpp
         Gui/qml_resource.qrc
         Gui/LoginPage/loginPageResource.qrc)
@@ -8,19 +9,18 @@ set(SOURCES
 set(HEADERS
         client.h)
 
-add_library(Client ${HEADERS} ${SOURCES})
+#add_library(Client ${HEADERS} ${SOURCES})
 
-target_include_directories(Client PUBLIC ./)
 
 find_package(Qt6 COMPONENTS Core Quick Network QuickControls2 REQUIRED)
 
-target_link_libraries(Client
+add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+
+target_link_libraries(${PROJECT_NAME}
         PUBLIC
         Qt6::Core
         Qt6::Network
         Qt6::Quick
         ClientData
 )
-
-qt6_add_resources(RESOURCES Gui/qml_resource.qrc)
-target_sources(Client PUBLIC ${RESOURCES})
+#target_include_directories(Client PUBLIC ./)
