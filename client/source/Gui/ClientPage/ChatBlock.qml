@@ -2,8 +2,6 @@ import QtQuick 2.15
 
 Rectangle
 {
-    width: parent.width
-    height: parent.width / 4
     border.color: "#078491"
     border.width: 1
     color: "#242625"
