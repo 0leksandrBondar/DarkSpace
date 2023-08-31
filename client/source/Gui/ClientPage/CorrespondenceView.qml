@@ -17,6 +17,7 @@ Rectangle
             {
                 message.title = userName
                 message.message = data
+                message.x = 5
                 flickableContent.contentY = messageList.height - flickableContent.height;
             }
 

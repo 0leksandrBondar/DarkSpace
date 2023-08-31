@@ -3,47 +3,59 @@ import QtQuick.Controls 2.15
 
 Rectangle {
     id: mainRect
-    width: parent.width
-    height: parent.height
-    color: "#242625"
 
-    Rectangle {
-        id: controlBar
-        width: mainRect.width
-        height: 50
-        color: "red"
-        anchors.top: mainRect.top
+    function addNewChat() {
+        console.log("hello");
+        var newChatBlock = Qt.createComponent("ChatBlock.qml")//.createObject(chatListView);
+        chatListModel.append({});
+        listView.positionViewAtEnd();
     }
 
-    Rectangle {
-        id: list
+    color: "#242625"
+    height: parent.height
+    width: parent.width
+
+    ControlBar {
+        id: controlBar
+
+        anchors.top: mainRect.top
         width: mainRect.width
-        height: mainRect.height - controlBar.height
+    }
+    ListModel {
+        id: chatListModel
+
+    }
+    Rectangle {
+        id: chatListView
+
         anchors.top: controlBar.bottom
-        color: "blue"
+        color: "#242625"
+        height: mainRect.height - controlBar.height
+        width: mainRect.width
+        border.color: "#078491"
+        border.width: 1
+
         ScrollView {
-            anchors.fill: list
+            ScrollBar.vertical.interactive: true
+            height: parent.height
+            width: parent.width
+
             ListView {
-                width: list.width
-                model: 30
+                id: listView
+
+                model: chatListModel
+
                 delegate: ChatBlock {
-                    id: chatBlock
-                    width: list.width
-                    height: list.width / 4
-                    Text {
-                        anchors.centerIn: parent
-                        width: chatBlock.width / 2
-                        height: chatBlock.height / 2
-                        text: "Some chat " + (index + 1)
-                        color: "#1cfc6a"
-                    }
+                    height: chatListView.width / 4
+                    width: chatListView.width
                 }
             }
-            ScrollBar.vertical.background: Rectangle {
-                color: "#242625"
-            }
-            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+        }
+    }
+    Connections {
+        target: controlBar
+        function onNewChatButtonClicked() {
+            addNewChat();
         }
     }
 }

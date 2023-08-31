@@ -7,6 +7,7 @@
         <file>Controllers/InfoPage.qml</file>
         <file>ClientPage/ClientPage.qml</file>
         <file>ClientPage/ChatListView.qml</file>
+        <file>ClientPage/ControlBar.qml</file>
         <file>ClientPage/ChatBlock.qml</file>
         <file>ClientPage/CorrespondenceScene.qml</file>
         <file>ClientPage/InputMessageField.qml</file>
