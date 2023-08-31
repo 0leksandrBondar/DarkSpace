@@ -23,23 +23,22 @@ Rectangle
         Text
         {
             id: titleMessage
-
+            x: 15
             text: title
             font.bold: true
             color: "black"
-            font.pixelSize: 14
+            font.pixelSize: 18
             wrapMode: Text.Wrap
-            anchors.leftMargin: 110
         }
 
         Text
         {
+            x: 20
             id: messageText
             text: message
             color: "black"
-            font.pixelSize: 14
+            font.pixelSize: 16
             wrapMode: Text.Wrap
-            anchors.leftMargin: 110
         }
     }
 }
