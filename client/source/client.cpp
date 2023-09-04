@@ -19,6 +19,10 @@ void Client::onRedyRead()
 		input >> _dataFromServer;
 		ClientDataType clientDataType = _dataFromServer.clientDataType();
 
+		qDebug() << "message = " << _dataFromServer.textMessageData().first;
+		qDebug() << "sender = " << _dataFromServer.userName();
+		qDebug() << "DataType = " << static_cast<int>(_dataFromServer.clientDataType());
+
 		processingClientDataFromServer(clientDataType);
 	}
 }

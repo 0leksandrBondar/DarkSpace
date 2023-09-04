@@ -24,8 +24,8 @@ Server::~Server()
 
 void Server::onReadyRead()
 {
-	_socket = (QTcpSocket*) sender();
-	QDataStream input(_socket);
+	_client->_socket = (QTcpSocket*) sender();
+	QDataStream input(_client->_socket);
 
 	if (input.status() != QDataStream::Ok)
 	{
@@ -34,6 +34,7 @@ void Server::onReadyRead()
 
 	input >> *_dataFromClient;
 
+	socketIdentification();
 	processingClientDataFromClient();
 }
 
@@ -46,24 +47,29 @@ void Server::sendToClient(const ClientData* data)
 	for (auto* socket : qAsConst(_sockets))
 	{
 		// TODO: optimize it
-		if (socket == _socket && _dataFromClient->clientDataType() != ClientDataType::MessageType)
+		if (socket->_socket == _client->_socket && _dataFromClient->clientDataType() != ClientDataType::MessageType)
 		{
-			socket->write(_data);
+			socket->_socket->write(_data);
 		}
-		if (socket != _socket && _dataFromClient->clientDataType() == ClientDataType::MessageType)
+
+		// TODO: instead of "Oleksandr" use custom username
+		if (socket->_socket != _client->_socket && socket->_userName == "Oleksandr" &&
+			_dataFromClient->clientDataType() == ClientDataType::MessageType)
 		{
-			socket->write(_data);
+			qDebug() << "send message to client (only for Oleksandr)";
+			socket->_socket->write(_data);
 		}
 	}
 }
 
 void Server::incomingConnection(qintptr socketDescriptor)
 {
-	_socket = new QTcpSocket(this);
-	_socket->setSocketDescriptor(socketDescriptor);
-	connect(_socket, &QTcpSocket::readyRead, this, &Server::onReadyRead);
-	connect(_socket, &QTcpSocket::disconnected, _socket, &QTcpSocket::deleteLater);
-	_sockets.push_back(_socket);
+	_client = new ClientSocket;
+	_client->_socket = new QTcpSocket(this);
+	_client->_socket->setSocketDescriptor(socketDescriptor);
+	connect(_client->_socket, &QTcpSocket::readyRead, this, &Server::onReadyRead);
+	connect(_client->_socket, &QTcpSocket::disconnected, _client->_socket, &QTcpSocket::deleteLater);
+	_sockets.push_back(_client);
 
 	qDebug() << "client is connected to server = " << socketDescriptor;
 }
@@ -115,4 +121,16 @@ void Server::processingSingInType()
 
 	_dataFromClient->setSignInRequestStatus(isClientExist);
 	sendToClient(_dataFromClient);
+}
+
+void Server::socketIdentification()
+{
+	for (auto* connectedSocket : _sockets)
+	{
+		if (connectedSocket->_socket == _client->_socket && (_dataFromClient->clientDataType() == ClientDataType::SignUpType ||
+																_dataFromClient->clientDataType() == ClientDataType::SignInType))
+		{
+			connectedSocket->_userName = _dataFromClient->userName();
+		}
+	}
 }
