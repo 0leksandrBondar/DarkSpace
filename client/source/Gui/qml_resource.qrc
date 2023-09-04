@@ -11,8 +11,10 @@
         <file>ClientPage/CorrespondenceScene.qml</file>
         <file>ClientPage/InputMessageField.qml</file>
         <file>ClientPage/Message.qml</file>
+        <file>ClientPage/ControlBar.qml</file>
         <file>ClientPage/CorrespondenceView.qml</file>
         <file>LoginPage/SignUpPage.qml</file>
         <file>LoginPage/SignUpPage.qml</file>
+        <file>DialogWindows/NewChatDialogWindow.qml</file>
     </qresource>
 </RCC>
