@@ -18,11 +18,6 @@ void Client::onRedyRead()
 	{
 		input >> _dataFromServer;
 		ClientDataType clientDataType = _dataFromServer.clientDataType();
-
-		qDebug() << "message = " << _dataFromServer.textMessageData().first;
-		qDebug() << "sender = " << _dataFromServer.userName();
-		qDebug() << "DataType = " << static_cast<int>(_dataFromServer.clientDataType());
-
 		processingClientDataFromServer(clientDataType);
 	}
 }
@@ -75,7 +70,7 @@ void Client::setUsername(const QString& newUsername)
 
 void Client::processingClientDataFromServer(ClientDataType type)
 {
-	qDebug() << "type = " << static_cast<int>(type);
+	//qDebug() << "type = " << static_cast<int>(type);
 	switch (type)
 	{
 		case ClientDataType::MessageType:
@@ -93,9 +88,31 @@ void Client::processingClientDataFromServer(ClientDataType type)
 			emit recivedSignInRequestStatus(_dataFromServer.isSingInRequestSuccessful());
 			break;
 		}
+		case ClientDataType::SearchUser:
+		{
+			if (_dataFromServer.isUserFound())
+			{
+				const QString receiverName = _dataFromServer.receiver();
+				qDebug() << "case ClientDataType::SearchUser: receiverName = " << receiverName;
+				_listOfOwnChats.push_back(receiverName);
+				emit userIsConnectedToServer(receiverName);
+			}
+			break;
+		}
 		case ClientDataType::Undefined:
 		{
 			break;
 		}
 	}
+}
+
+void Client::searchUser(const QString& userName)
+{
+	ClientData clientData;
+
+	qDebug() << "search user = " << userName;
+	clientData.setReceiver(userName);
+	clientData.setClientDataType(ClientDataType::SearchUser);
+
+	sendClientDataToServer(clientData);
 }

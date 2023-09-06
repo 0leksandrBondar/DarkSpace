@@ -33,6 +33,10 @@ Dialog {
             anchors.bottom: parent.bottom
             anchors.right: parent.horizontalCenter
             text: "create"
+            onClicked:
+            {
+                clientClass.searchUser(searchUser.text)
+            }
         }
         Button {
             height: 30

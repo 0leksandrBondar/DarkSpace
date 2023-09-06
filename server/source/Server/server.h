@@ -32,6 +32,7 @@ private:
 	void processingClientDataFromClient();
 
 	void processingSingInType();
+	void processingSearchType();
 	void processingSingUpType();
 	void processingMessageType();
 

@@ -9,7 +9,7 @@ import ClientSide 1.0
 StackView {
     id: stackPagesView
     anchors.fill: parent
-    initialItem: clientPage
+    initialItem: logInPage
 
     Client {
         id: clientClass

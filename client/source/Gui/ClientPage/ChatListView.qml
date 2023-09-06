@@ -6,13 +6,21 @@ import "../DialogWindows"
 Rectangle {
     id: mainRect
 
-    function addNewChat() {
-        console.log("hello");
-        var newChatBlock = Qt.createComponent("ChatBlock.qml")
-        chatListModel.append({});
-        listView.positionViewAtEnd();
-    }
 
+    property var newChatBlock: null
+    property string  customChatName: ""
+
+    function addNewChat(name) {
+        var component = Qt.createComponent("ChatBlock.qml");
+        newChatBlock = component.createObject();
+
+        if (component.status === Component.Ready) {
+            console.log(name)
+            customChatName = name;
+            chatListModel.append({ chatBlock: newChatBlock });
+            listView.positionViewAtEnd();
+        }
+    }
     color: "#242625"
     height: parent.height
     width: parent.width
@@ -49,12 +57,22 @@ Rectangle {
                 delegate: ChatBlock {
                     height: chatListView.width / 4
                     width: chatListView.width
+                    chatName: customChatName
                 }
             }
         }
     }
     NewChatDialogWindow {
         id: newChatWindow
+    }
+    Connections {
+        target: clientClass
+
+        function onUserIsConnectedToServer(userName) {
+            console.log("add new  chat slot is called ")
+            addNewChat(userName)
+            newChatWindow.close()
+        }
     }
 
     Connections {

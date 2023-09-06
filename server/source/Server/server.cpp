@@ -95,6 +95,11 @@ void Server::processingClientDataFromClient()
 			processingSingInType();
 			break;
 		}
+		case ClientDataType::SearchUser:
+		{
+			processingSearchType();
+			break;
+		}
 		case ClientDataType::Undefined:
 		{
 			break;
@@ -125,12 +130,26 @@ void Server::processingSingInType()
 
 void Server::socketIdentification()
 {
-	for (auto* connectedSocket : _sockets)
+	if (_dataFromClient->clientDataType() == ClientDataType::SignUpType ||
+		_dataFromClient->clientDataType() == ClientDataType::SignInType)
 	{
-		if (connectedSocket->_socket == _client->_socket && (_dataFromClient->clientDataType() == ClientDataType::SignUpType ||
-																_dataFromClient->clientDataType() == ClientDataType::SignInType))
+		for (auto* connectedSocket : _sockets)
 		{
-			connectedSocket->_userName = _dataFromClient->userName();
+			if (connectedSocket->_socket == _client->_socket)
+			{
+				connectedSocket->_userName = _dataFromClient->userName();
+			}
 		}
 	}
+}
+
+void Server::processingSearchType()
+{
+	const auto it = std::find_if(_sockets.begin(), _sockets.end(),
+		[this](ClientSocket* socket) { return socket->_userName == _dataFromClient->receiver(); });
+
+	_dataFromClient->setSearchUserResult(it != nullptr);
+
+	qDebug() << "Server =  Search User result = " << (it != nullptr);
+	sendToClient(_dataFromClient);
 }
