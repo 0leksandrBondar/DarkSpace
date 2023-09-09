@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 set(SOURCES
         main.cpp
+        icons.qrc
         client.cpp
         Gui/qml_resource.qrc
         Gui/LoginPage/loginPageResource.qrc)
@@ -23,4 +24,3 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Quick
         ClientData
 )
-#target_include_directories(Client PUBLIC ./)
