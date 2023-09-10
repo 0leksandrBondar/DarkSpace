@@ -11,6 +11,16 @@ Rectangle {
 
     signal newChatButtonClicked()
 
+    Text
+    {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 5
+        text: clientClass.userName()
+        font.pointSize: 15
+        color: "white"
+    }
+
     Button {
         id: settingsButton
         width: 60
@@ -18,7 +28,7 @@ Rectangle {
         text: qsTr("Settings")
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: 30
+        anchors.rightMargin: 5
     }
 
     Button {
@@ -27,8 +37,8 @@ Rectangle {
         height: 40
         text: qsTr("new chat")
         anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 30
+        anchors.right: settingsButton.left
+        anchors.rightMargin: 5
         onClicked: newChatButtonClicked()
     }
 }

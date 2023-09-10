@@ -21,6 +21,7 @@ signals:
 	void getMessageFromServer(const QString& data, const QString& userName);
 
 public slots:
+	QString userName() const;
 	void setUsername(const QString& newUsername);
 
 	// ----- send some data to server

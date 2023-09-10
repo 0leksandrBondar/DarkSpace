@@ -52,6 +52,7 @@ Rectangle {
 
             ListView {
                 id: listView
+
                 model: chatListModel
 
                 delegate: ChatBlock {

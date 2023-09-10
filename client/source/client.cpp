@@ -116,3 +116,8 @@ void Client::searchUser(const QString& userName)
 
 	sendClientDataToServer(clientData);
 }
+
+QString Client::userName() const
+{
+	return _username;
+}
