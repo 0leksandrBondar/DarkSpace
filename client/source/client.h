@@ -39,6 +39,7 @@ public slots:
 
 private:
 	void processingClientDataFromServer(ClientDataType type);
+	bool isReceiverExist(const QString& receiver) const;
 
 private:
 	QString _username;

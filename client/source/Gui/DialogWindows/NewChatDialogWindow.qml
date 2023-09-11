@@ -36,6 +36,7 @@ Dialog {
             onClicked:
             {
                 clientClass.searchUser(searchUser.text)
+                searchUser.text = ""
             }
         }
         Button {

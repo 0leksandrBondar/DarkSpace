@@ -70,7 +70,6 @@ Rectangle {
         target: clientClass
 
         function onUserIsConnectedToServer(userName) {
-            console.log("add new  chat slot is called ")
             addNewChat(userName)
             newChatWindow.close()
         }

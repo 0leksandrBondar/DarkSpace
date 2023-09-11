@@ -70,7 +70,7 @@ void Client::setUsername(const QString& newUsername)
 
 void Client::processingClientDataFromServer(ClientDataType type)
 {
-	//qDebug() << "type = " << static_cast<int>(type);
+	// qDebug() << "type = " << static_cast<int>(type);
 	switch (type)
 	{
 		case ClientDataType::MessageType:
@@ -90,12 +90,10 @@ void Client::processingClientDataFromServer(ClientDataType type)
 		}
 		case ClientDataType::SearchUser:
 		{
-			if (_dataFromServer.isUserFound())
+			if (_dataFromServer.isUserFound() && !isReceiverExist(_dataFromServer.receiver()))
 			{
-				const QString receiverName = _dataFromServer.receiver();
-				qDebug() << "case ClientDataType::SearchUser: receiverName = " << receiverName;
-				_listOfOwnChats.push_back(receiverName);
-				emit userIsConnectedToServer(receiverName);
+				_listOfOwnChats.push_back(_dataFromServer.receiver());
+				emit userIsConnectedToServer(_dataFromServer.receiver());
 			}
 			break;
 		}
@@ -120,4 +118,16 @@ void Client::searchUser(const QString& userName)
 QString Client::userName() const
 {
 	return _username;
+}
+
+bool Client::isReceiverExist(const QString& receiver) const
+{
+	const auto it = std::find(_listOfOwnChats.begin(), _listOfOwnChats.end(), receiver);
+
+	if (it != _listOfOwnChats.end())
+	{
+		return true;
+	}
+
+	return false;
 }
