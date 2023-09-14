@@ -5,7 +5,7 @@
 
 Client::Client() : _socket{new QTcpSocket(this)}
 {
-	_socket->connectToHost(QStringLiteral("192.168.68.224"), 2023);
+	_socket->connectToHost(QStringLiteral("192.168.3.28"), 2023);
 	connect(_socket, &QTcpSocket::readyRead, this, &Client::onRedyRead);
 	connect(_socket, &QTcpSocket::disconnected, _socket, &QTcpSocket::deleteLater);
 	connect(_socket, &QTcpSocket::disconnected, _socket, &QTcpSocket::deleteLater);
