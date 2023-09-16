@@ -23,6 +23,7 @@ signals:
 public slots:
 	QString userName() const;
 	void setUsername(const QString& newUsername);
+	void setReceiver(const QString& receiver);
 
 	// ----- send some data to server
 	void sendClientDataToServer(const ClientData& data);
@@ -42,6 +43,7 @@ private:
 	bool isReceiverExist(const QString& receiver) const;
 
 private:
+	QString _receiver;
 	QString _username;
 	QTcpSocket* _socket;
 	ClientData _dataFromServer;

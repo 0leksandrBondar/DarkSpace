@@ -48,9 +48,11 @@ void Client::fillMessageData(const QString& text)
 {
 	ClientData clientData;
 
+	clientData.setReceiver(_receiver);
 	clientData.setUserName(_username);
-	clientData.setTextMessageData({text, clientData.userName()});
 	clientData.setClientDataType(ClientDataType::MessageType);
+	clientData.setTextMessageData({text, clientData.userName()});
+
 	sendClientDataToServer(clientData);
 }
 
@@ -130,4 +132,9 @@ bool Client::isReceiverExist(const QString& receiver) const
 	}
 
 	return false;
+}
+
+void Client::setReceiver(const QString& receiver)
+{
+	_receiver = receiver;
 }

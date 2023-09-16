@@ -56,12 +56,18 @@ Rectangle {
                 model: chatListModel
 
                 delegate: ChatBlock {
+                    id: chatBlock
                     height: chatListView.width / 4
                     width: chatListView.width
                     chatName: customChatName
+                    onNewChatIsSelected:
+                    {
+                        clientClass.setReceiver(chatBlock.chatName)
+                    }
                 }
             }
         }
+
     }
     NewChatDialogWindow {
         id: newChatWindow
@@ -74,7 +80,6 @@ Rectangle {
             newChatWindow.close()
         }
     }
-
     Connections {
         target: controlBar
 
