@@ -5,10 +5,12 @@
 #include <QString>
 #include <QTcpServer>
 
+#include <vector>
+
 class QTcpSocket;
 class DBManager;
 
-struct ClientSocket
+struct ClientInfo
 {
 	QString _userName;
 	QTcpSocket* _socket;
@@ -23,7 +25,8 @@ public:
 
 private:
 	void onReadyRead();
-	void socketIdentification();
+	QTcpSocket* receiverSocket();
+	void socketIdentificationDuringAuth();
 	void sendToClient(const ClientData* data);
 	void incomingConnection(qintptr socketDescriptor) override;
 
@@ -39,7 +42,7 @@ private:
 private:
 	DBManager* _db;
 	QByteArray _data;
-	ClientSocket* _client;
+	QTcpSocket* _senderSocket;
 	ClientData* _dataFromClient;
-	QVector<ClientSocket*> _sockets;
+	std::vector<ClientInfo*> _sockets;
 };

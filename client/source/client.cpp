@@ -17,7 +17,7 @@ void Client::onRedyRead()
 	if (input.status() == QDataStream::Ok)
 	{
 		input >> _dataFromServer;
-		ClientDataType clientDataType = _dataFromServer.clientDataType();
+		const ClientDataType clientDataType = _dataFromServer.clientDataType();
 		processingClientDataFromServer(clientDataType);
 	}
 }
@@ -72,7 +72,6 @@ void Client::setUsername(const QString& newUsername)
 
 void Client::processingClientDataFromServer(ClientDataType type)
 {
-	// qDebug() << "type = " << static_cast<int>(type);
 	switch (type)
 	{
 		case ClientDataType::MessageType:

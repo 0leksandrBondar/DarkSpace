@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QTcpSocket>
 
-Server::Server() : _db{new DBManager(this)}, _dataFromClient{new ClientData}
+Server::Server() : _db {new DBManager(this)}, _dataFromClient {new ClientData}
 {
 	if (listen(QHostAddress::AnyIPv4, 2023))
 	{
@@ -19,13 +19,19 @@ Server::Server() : _db{new DBManager(this)}, _dataFromClient{new ClientData}
 
 Server::~Server()
 {
+	delete _db;
+	delete _senderSocket;
 	delete _dataFromClient;
 }
 
+/*!
+ * \brief Server::onReadyRead this method is called when any client sends information to the server and processes it.
+ */
 void Server::onReadyRead()
 {
-	_client->_socket = (QTcpSocket*) sender();
-	QDataStream input(_client->_socket);
+	_senderSocket = dynamic_cast<QTcpSocket*>(sender());
+
+	QDataStream input(_senderSocket);
 
 	if (input.status() != QDataStream::Ok)
 	{
@@ -34,42 +40,59 @@ void Server::onReadyRead()
 
 	input >> *_dataFromClient;
 
-	socketIdentification();
+	socketIdentificationDuringAuth();
 	processingClientDataFromClient();
 }
 
+/*!
+ * \brief Server::receiverSocket this method handles information about which client should receive the information.
+ * \return a specific socket that should receive information.
+ */
+QTcpSocket* Server::receiverSocket()
+{
+	const bool isSearchType {_dataFromClient->clientDataType() == ClientDataType::SearchUser};
+	const bool isMessageType {_dataFromClient->clientDataType() == ClientDataType::MessageType};
+	const bool isAuthType {_dataFromClient->clientDataType() == ClientDataType::SignInType ||
+						   _dataFromClient->clientDataType() == ClientDataType::SignUpType};
+
+	for (const auto* connectedSocket : qAsConst(_sockets))
+	{
+		const bool isDifferentSocket {connectedSocket->_socket != _senderSocket};
+		const bool isSameClientSender {connectedSocket->_socket == _senderSocket};
+		const bool isMatchingReceiver {connectedSocket->_userName == _dataFromClient->receiver()};
+
+		if ((isSameClientSender && (isAuthType || isSearchType)) || (isDifferentSocket && isMatchingReceiver && isMessageType))
+		{
+			return connectedSocket->_socket;
+		}
+	}
+	return nullptr;
+}
+
+/*!
+ * \brief Server::sendToClient sends information to a specific socket.
+ */
 void Server::sendToClient(const ClientData* data)
 {
 	_data.clear();
 	QDataStream output(&_data, QIODevice::WriteOnly);
 	output << *data;
 
-	for (auto* socket : qAsConst(_sockets))
-	{
-		// TODO: optimize it
-		if (socket->_socket == _client->_socket && _dataFromClient->clientDataType() != ClientDataType::MessageType)
-		{
-			socket->_socket->write(_data);
-		}
+	auto* socket = receiverSocket();
 
-		// TODO: instead of "Oleksandr" use custom username
-		if (socket->_socket != _client->_socket && socket->_userName == "Oleksandr" &&
-			_dataFromClient->clientDataType() == ClientDataType::MessageType)
-		{
-			qDebug() << "send message to client (only for Oleksandr)";
-			socket->_socket->write(_data);
-		}
+	if (socket != nullptr)
+	{
+		socket->write(_data);
 	}
 }
 
 void Server::incomingConnection(qintptr socketDescriptor)
 {
-	_client = new ClientSocket;
-	_client->_socket = new QTcpSocket(this);
-	_client->_socket->setSocketDescriptor(socketDescriptor);
-	connect(_client->_socket, &QTcpSocket::readyRead, this, &Server::onReadyRead);
-	connect(_client->_socket, &QTcpSocket::disconnected, _client->_socket, &QTcpSocket::deleteLater);
-	_sockets.push_back(_client);
+	_senderSocket = new QTcpSocket(this);
+	_senderSocket->setSocketDescriptor(socketDescriptor);
+	connect(_senderSocket, &QTcpSocket::readyRead, this, &Server::onReadyRead);
+	connect(_senderSocket, &QTcpSocket::disconnected, _senderSocket, &QTcpSocket::deleteLater);
+	_sockets.push_back(new ClientInfo {"", _senderSocket});
 
 	qDebug() << "client is connected to server = " << socketDescriptor;
 }
@@ -107,11 +130,17 @@ void Server::processingClientDataFromClient()
 	}
 }
 
+/*!
+ * \brief Server::processingMessageType sends a message of type ClientDataType::MessageType to some client
+ */
 void Server::processingMessageType()
 {
 	sendToClient(_dataFromClient);
 }
 
+/*!
+ * \brief Server::processingSingUpType adds a new user to the database if it does not exist
+ */
 void Server::processingSingUpType()
 {
 	const bool isClientAdded = _db->addClientToDataBase(_dataFromClient);
@@ -119,6 +148,10 @@ void Server::processingSingUpType()
 	sendToClient(_dataFromClient);
 }
 
+/*!
+ * \brief Server::processingSingInType this method checks if a client with the provided login exists in the server's database and
+ * responds with the result.
+ */
 void Server::processingSingInType()
 {
 	const QString login = _dataFromClient->signInData().first;
@@ -128,14 +161,22 @@ void Server::processingSingInType()
 	sendToClient(_dataFromClient);
 }
 
-void Server::socketIdentification()
+/*!
+ * \brief Server::socketIdentificationDuringAuth identifies all new connections by the username entered by the client during
+ * authentication
+ */
+void Server::socketIdentificationDuringAuth()
 {
-	if (_dataFromClient->clientDataType() == ClientDataType::SignUpType ||
-		_dataFromClient->clientDataType() == ClientDataType::SignInType)
+	const bool isAuthType {_dataFromClient->clientDataType() == ClientDataType::SignInType ||
+						   _dataFromClient->clientDataType() == ClientDataType::SignUpType};
+
+	if (isAuthType)
 	{
 		for (auto* connectedSocket : _sockets)
 		{
-			if (connectedSocket->_socket == _client->_socket)
+			const bool isSameClientSender {connectedSocket->_socket == _senderSocket};
+
+			if (isSameClientSender)
 			{
 				connectedSocket->_userName = _dataFromClient->userName();
 			}
@@ -145,11 +186,9 @@ void Server::socketIdentification()
 
 void Server::processingSearchType()
 {
-	const auto it = std::find_if(_sockets.begin(), _sockets.end(),
-		[this](ClientSocket* socket) { return socket->_userName == _dataFromClient->receiver(); });
+	const auto it = std::find_if(_sockets.cbegin(), _sockets.cend(),
+		[this](ClientInfo* socket) { return socket->_userName == _dataFromClient->receiver(); });
 
-	_dataFromClient->setSearchUserResult(it != nullptr);
-
-	qDebug() << "Server =  Search User result = " << (it != nullptr);
+	_dataFromClient->setSearchUserResult(it != _sockets.cend());
 	sendToClient(_dataFromClient);
 }
