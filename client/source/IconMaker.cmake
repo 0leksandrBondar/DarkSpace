@@ -1,0 +1,6 @@
+macro(add_icon)
+    if (WIN32)
+        set(APP_ICON "${CMAKE_CURRENT_SOURCE_DIR}/AppIcons/DarkSpace.rc")
+        set(APP_TYPE WIN32)
+    endif ()
+endmacro()
