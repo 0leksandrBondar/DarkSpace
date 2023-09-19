@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.5)
 
 set(SOURCES
         main.cpp
-        icons.qrc
         client.cpp
         Gui/qml_resource.qrc
         Gui/LoginPage/loginPageResource.qrc
