@@ -64,7 +64,7 @@ bool DBManager::isUserExistInDataBase(const QString& login)
 		int userCount = checkQuery.value(0).toInt();
 		if (userCount > 0)
 		{
-			qWarning() << "User with login" << login << "already exists.";
+			//qWarning() << "User with login" << login << "already exists.";
 			return true;
 		}
 	}

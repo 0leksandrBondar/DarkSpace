@@ -50,6 +50,8 @@ QDataStream& operator<<(QDataStream& out, const ClientData& data)
 	out << data._textMessageData.first;
 	out << data._textMessageData.second;
 	out << data._clientDataType;
+	out << data._searchUserResult;
+	out << data._receiver;
 
 	return out;
 }
@@ -66,6 +68,8 @@ QDataStream& operator>>(QDataStream& in, ClientData& data)
 	in >> data._textMessageData.first;
 	in >> data._textMessageData.second;
 	in >> data._clientDataType;
+	in >> data._searchUserResult;
+	in >> data._receiver;
 
 	return in;
 }
@@ -103,4 +107,24 @@ void ClientData::setSignInRequestStatus(bool status)
 std::pair<QString, QString> ClientData::signUpData() const
 {
 	return _signUpData;
+}
+
+QString ClientData::receiver() const
+{
+	return _receiver;
+}
+
+void ClientData::setReceiver(const QString& receiver)
+{
+	_receiver = receiver;
+}
+
+bool ClientData::isUserFound() const
+{
+	return _searchUserResult;
+}
+
+void ClientData::setSearchUserResult(bool searchResult)
+{
+	_searchUserResult = searchResult;
 }

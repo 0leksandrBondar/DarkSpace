@@ -17,8 +17,7 @@ void Client::onRedyRead()
 	if (input.status() == QDataStream::Ok)
 	{
 		input >> _dataFromServer;
-		ClientDataType clientDataType = _dataFromServer.clientDataType();
-
+		const ClientDataType clientDataType = _dataFromServer.clientDataType();
 		processingClientDataFromServer(clientDataType);
 	}
 }
@@ -49,9 +48,11 @@ void Client::fillMessageData(const QString& text)
 {
 	ClientData clientData;
 
+	clientData.setReceiver(_receiver);
 	clientData.setUserName(_username);
-	clientData.setTextMessageData({text, clientData.userName()});
 	clientData.setClientDataType(ClientDataType::MessageType);
+	clientData.setTextMessageData({text, clientData.userName()});
+
 	sendClientDataToServer(clientData);
 }
 
@@ -71,7 +72,6 @@ void Client::setUsername(const QString& newUsername)
 
 void Client::processingClientDataFromServer(ClientDataType type)
 {
-	qDebug() << "type = " << static_cast<int>(type);
 	switch (type)
 	{
 		case ClientDataType::MessageType:
@@ -89,9 +89,51 @@ void Client::processingClientDataFromServer(ClientDataType type)
 			emit recivedSignInRequestStatus(_dataFromServer.isSingInRequestSuccessful());
 			break;
 		}
+		case ClientDataType::SearchUser:
+		{
+			if (_dataFromServer.isUserFound() && !isReceiverExist(_dataFromServer.receiver()))
+			{
+				_listOfOwnChats.push_back(_dataFromServer.receiver());
+				emit userIsConnectedToServer(_dataFromServer.receiver());
+			}
+			break;
+		}
 		case ClientDataType::Undefined:
 		{
 			break;
 		}
 	}
+}
+
+void Client::searchUser(const QString& userName)
+{
+	ClientData clientData;
+
+	qDebug() << "search user = " << userName;
+	clientData.setReceiver(userName);
+	clientData.setClientDataType(ClientDataType::SearchUser);
+
+	sendClientDataToServer(clientData);
+}
+
+QString Client::userName() const
+{
+	return _username;
+}
+
+bool Client::isReceiverExist(const QString& receiver) const
+{
+	const auto it = std::find(_listOfOwnChats.begin(), _listOfOwnChats.end(), receiver);
+
+	if (it != _listOfOwnChats.end())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void Client::setReceiver(const QString& receiver)
+{
+	_receiver = receiver;
 }
