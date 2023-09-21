@@ -21,4 +21,9 @@ This project is designed to learn how to work with the following technologies:
 
 ![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/11fdfd92-a5a3-489a-bf37-cb5e9ad0252b)
 
-![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/f90f427f-600b-47dd-abf3-f7928db6f027)
+![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/2f1c4eb4-10e4-4710-954b-8a04ac10459c)
+
+![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/ab1867aa-fa71-4cb6-b635-d9e5f289c09f)
+
+![image](https://github.com/0leksandrBondar/DarkSpace/assets/104301715/a8aff13f-3844-44e8-8828-6ee300c43290)
+
