@@ -79,6 +79,7 @@ Rectangle {
         target: mainRect
 
         function onSignUpClicked() {
+            clientClass.setUsername(userName.text)
             clientClass.fillSignUpData(email.text, password.text, userName.text)
         }
 
