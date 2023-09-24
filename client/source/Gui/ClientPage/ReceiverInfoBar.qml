@@ -8,16 +8,12 @@ Rectangle {
     width: parent.width
     height: 50
 
-    Loader {
-        id: loader
-        source: "ChatBlock.qml"
-        onLoaded: console.log("dasdsadasdsad")//item.newChatIsSelected.connect(updateChatName)
-    }
+    property string newChatName: ""
 
     Text {
         id: chatName
         width: parent.width / 3
-        text: "chat name"
+        text: newChatName
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
@@ -28,11 +24,5 @@ Rectangle {
     function updateChatName(chatNameValue) {
         console.log("mouse clicked!")
         chatName.text = chatNameValue;
-    }
-
-    Connections
-    {
-        target: loader
-        onNewChatIsSelected: updateChatName(chatName)
     }
 }

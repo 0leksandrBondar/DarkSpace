@@ -3,6 +3,11 @@ import QtQuick 2.15
 Rectangle {
     id: mainCorrespondenceScene
 
+    function updateChatName(chatName)
+    {
+        receiverInfoBar.newChatName = chatName
+    }
+
     CorrespondenceView {
         id: correspondenceView
         height: parent.height - receiverInfoBar.height

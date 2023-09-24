@@ -6,6 +6,7 @@ import "../DialogWindows"
 Rectangle {
     id: mainRect
 
+    signal updateChatNameInInfoBar(string newChatName)
 
     property var newChatBlock: null
     property string  customChatName: ""
@@ -17,10 +18,11 @@ Rectangle {
         if (component.status === Component.Ready) {
             console.log(name)
             customChatName = name;
-            chatListModel.append({ chatBlock: newChatBlock });
+            chatListModel.append({chatBlock: newChatBlock});
             listView.positionViewAtEnd();
         }
     }
+
     color: "#242625"
     height: parent.height
     width: parent.width
@@ -60,9 +62,9 @@ Rectangle {
                     height: chatListView.width / 4
                     width: chatListView.width
                     chatName: customChatName
-                    onNewChatIsSelected:
-                    {
+                    onNewChatIsSelected: {
                         clientClass.setReceiver(chatBlock.chatName)
+                        updateChatNameInInfoBar(chatBlock.chatName)
                     }
                 }
             }

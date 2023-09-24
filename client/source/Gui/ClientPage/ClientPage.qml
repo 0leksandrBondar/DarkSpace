@@ -10,7 +10,16 @@ Rectangle {
         width: parent.width / 3
         height: parent.height
         ChatListView {
+            id: chatList
+        }
+        Connections
+        {
+            target: chatList
 
+            function onUpdateChatNameInInfoBar(newChatName) {
+                console.log(newChatName)
+                correspondenceScene.updateChatName(newChatName)
+            }
         }
     }
     CorrespondenceScene
@@ -20,4 +29,6 @@ Rectangle {
         width: parent.width - chatListView.width
         height: parent.height
     }
+
+
 }
