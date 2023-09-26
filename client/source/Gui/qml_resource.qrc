@@ -8,6 +8,7 @@
         <file>ClientPage/ClientPage.qml</file>
         <file>ClientPage/ChatListView.qml</file>
         <file>ClientPage/ChatBlock.qml</file>
+        <file>ClientPage/ReceiverInfoBar.qml</file>
         <file>ClientPage/CorrespondenceScene.qml</file>
         <file>ClientPage/InputMessageField.qml</file>
         <file>ClientPage/Message.qml</file>

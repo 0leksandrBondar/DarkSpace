@@ -1,28 +1,34 @@
 import QtQuick 2.15
 
-Rectangle
-{
+Rectangle {
     id: mainCorrespondenceScene
 
-    CorrespondenceView
+    function updateChatName(chatName)
     {
-        id: correspondenceView
+        receiverInfoBar.newChatName = chatName
     }
 
-    InputMessageField
-    {
+    CorrespondenceView {
+        id: correspondenceView
+        height: parent.height - receiverInfoBar.height
+        anchors.top: receiverInfoBar.bottom
+    }
+
+    InputMessageField {
         id: messageField
         height: 60
         width: mainWindow.width - mainWindow.width / 3
         anchors.bottom: parent.bottom
-        Connections
-        {
+        Connections {
             target: messageField
-            function onCreateNewMessage(data, userName)
-            {
+
+            function onCreateNewMessage(data, userName) {
                 correspondenceView.addNewMessage(data, userName)
             }
         }
     }
-
+    ReceiverInfoBar {
+        id: receiverInfoBar
+        anchors.top: parent.top
+    }
 }
