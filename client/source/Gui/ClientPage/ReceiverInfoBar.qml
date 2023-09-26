@@ -8,7 +8,7 @@ Rectangle {
     width: parent.width
     height: 50
 
-    property string newChatName: ""
+    property string newChatName: "Chat isn't selected"
 
     Text {
         id: chatName
