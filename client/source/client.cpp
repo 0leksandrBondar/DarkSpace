@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QTcpSocket>
 
-Client::Client() : _socket{new QTcpSocket(this)}
+Client::Client() : _socket {new QTcpSocket(this)}
 {
 	_socket->connectToHost(QStringLiteral("192.168.3.28"), 2023);
 	connect(_socket, &QTcpSocket::readyRead, this, &Client::onRedyRead);
@@ -76,6 +76,10 @@ void Client::processingClientDataFromServer(ClientDataType type)
 	{
 		case ClientDataType::MessageType:
 		{
+			if (!isReceiverExist(_dataFromServer.userName()))
+			{
+				emit createNewChat(_dataFromServer.userName());
+			}
 			emit getMessageFromServer(_dataFromServer.textMessageData().first, _dataFromServer.userName());
 			break;
 		}
