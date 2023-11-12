@@ -8,7 +8,7 @@ Rectangle {
         receiverInfoBar.newChatName = chatName
     }
 
-    CorrespondenceView {
+    CorrespondenceScene {
         id: correspondenceView
         height: parent.height - receiverInfoBar.height
         anchors.top: receiverInfoBar.bottom

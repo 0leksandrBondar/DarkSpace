@@ -12,14 +12,12 @@ Rectangle
         {
             var component = Qt.createComponent("Message.qml")
             message = component.createObject(messageList)
-
             if(message !== null)
             {
                 message.title = userName
                 message.message = data
                 flickableContent.contentY = messageList.height - flickableContent.height;
             }
-
             message = null
         }
     }
