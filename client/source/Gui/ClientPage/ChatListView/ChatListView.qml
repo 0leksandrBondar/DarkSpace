@@ -4,92 +4,88 @@ import QtQuick.Controls 2.15
 import "../../DialogWindows"
 
 Rectangle {
-    id: mainRect
+    id: chatListViewBlock
 
     signal updateChatNameInInfoBar(string newChatName)
-
-    property var newChatBlock: null
-    property string  customChatName: ""
-
-    function addNewChat(name) {
-        var component = Qt.createComponent("ChatBlock.qml");
-        newChatBlock = component.createObject();
-
-        if (component.status === Component.Ready) {
-            console.log(name)
-            customChatName = name;
-            chatListModel.append({chatBlock: newChatBlock});
-            listView.positionViewAtEnd();
-        }
-    }
 
     color: "#242625"
     height: parent.height
     width: parent.width
 
-    ControlBar {
+    ControlBar
+     {
         id: controlBar
 
-        anchors.top: mainRect.top
-        width: mainRect.width
+        anchors.top: chatListViewBlock.top
+        width: chatListViewBlock.width
     }
-    ListModel {
-        id: chatListModel
 
+    function addChat(chatName)
+    {
+         console.log("addChat")
+         chatList.append({ name : chatName })
     }
-    Rectangle {
+
+    NewChatDialogWindow
+    {
+        id: newChatWindow
+    }
+
+    Rectangle
+    {
         id: chatListView
+         anchors.top: controlBar.bottom
+         color: "#242625"
+         height: chatListViewBlock.height - controlBar.height
+         width: chatListViewBlock.width
+         border.color: "#078491"
+         border.width: 1
 
-        anchors.top: controlBar.bottom
-        color: "#242625"
-        height: mainRect.height - controlBar.height
-        width: mainRect.width
-        border.color: "#078491"
-        border.width: 1
-
-        ScrollView {
-            ScrollBar.vertical.interactive: true
-            height: parent.height
-            width: parent.width
-
-            ListView {
-                id: listView
-
-                model: chatListModel
-
-                delegate: ChatBlock {
-                    id: chatBlock
-                    height: chatListView.width / 4
-                    width: chatListView.width
-                    chatName: customChatName
-                    onNewChatIsSelected: {
-                        clientClass.setReceiver(chatBlock.chatName)
-                        updateChatNameInInfoBar(chatBlock.chatName)
-                    }
+        ListModel
+        {
+            id: chatList
+        }
+        Component
+        {
+            id: chatBlockDelegate
+            ChatBlock
+            {
+                id: chatBlock
+                width: parent.width
+                height: 50
+                chatName: model.name
+                onNewChatIsSelected:
+                {
+                    clientClass.setReceiver(chatBlock.chatName)
+                    updateChatNameInInfoBar(chatBlock.chatName)
                 }
             }
         }
-
+        ListView
+        {
+            anchors.fill: parent
+            model: chatList
+            delegate: chatBlockDelegate
+        }
     }
-    NewChatDialogWindow {
-        id: newChatWindow
-    }
-    Connections {
+    Connections
+    {
         target: clientClass
 
         function onUserIsConnectedToServer(userName) {
-            addNewChat(userName)
+            addChat(userName)
             newChatWindow.close()
         }
         function onCreateNewChat(senderName)
         {
-            addNewChat(senderName)
+            addChat(senderName)
         }
     }
-    Connections {
+    Connections
+     {
         target: controlBar
-
-        function onNewChatButtonClicked() {
+        function onNewChatButtonClicked()
+        {
             newChatWindow.open()
         }
     }

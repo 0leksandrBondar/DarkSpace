@@ -9,14 +9,14 @@ Dialog {
     height: 250;
     background: Rectangle {
         color: "#242625"
+        border.color: "#078491"
+                border.width: 1
     }
 
     Rectangle {
         id: dialogRect
         anchors.fill: parent
         color: "#242625"
-        border.color: "#078491"
-        border.width: 1
         ShredCompFolder.InputField {
             id: searchUser
             width: parent.width * 0.85

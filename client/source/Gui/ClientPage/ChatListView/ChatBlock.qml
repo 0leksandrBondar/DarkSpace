@@ -1,25 +1,25 @@
 import QtQuick 2.15
 
-Rectangle {
+Rectangle
+{
     border.color: "#078491"
     border.width: 1
     color: "#242625"
 
     property string chatName: ""
-
     signal newChatIsSelected(string chatName);
 
-    Text {
-        id: text
+    Text
+    {
         anchors.centerIn: parent
-        color: "white"
         text: chatName
+        color: "white"
     }
     MouseArea {
         anchors.fill: parent
         onClicked: {
             console.log("ChatBlock was clicked!")
-            newChatIsSelected(text.text)
+            newChatIsSelected(chatName)
         }
         onEntered: {
             color = "#505151"
