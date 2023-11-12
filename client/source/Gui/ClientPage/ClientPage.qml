@@ -1,6 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "./ChatListView"
+import "./CorrespondenceView"
+
 Rectangle {
     color: "#242625"
 
@@ -22,13 +25,11 @@ Rectangle {
             }
         }
     }
-    CorrespondenceScene
+    CorrespondenceView
     {
         id: correspondenceScene
         anchors.right: parent.right
         width: parent.width - chatListView.width
         height: parent.height
     }
-
-
 }
