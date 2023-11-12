@@ -81,6 +81,10 @@ Rectangle {
             addNewChat(userName)
             newChatWindow.close()
         }
+        function onCreateNewChat(senderName)
+        {
+            addNewChat(senderName)
+        }
     }
     Connections {
         target: controlBar
