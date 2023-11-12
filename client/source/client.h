@@ -17,6 +17,7 @@ public:
 signals:
     void recivedSignUpRequestStatus(bool status);
     void recivedSignInRequestStatus(bool status);
+    void createNewChat(const QString& senderName);
     void userIsConnectedToServer(const QString& userName);
     void getMessageFromServer(const QString& data, const QString& userName);
 
