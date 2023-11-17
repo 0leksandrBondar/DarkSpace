@@ -2,12 +2,19 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Basic
 
+import "../../DialogWindows"
+
 Rectangle
 {
     id: inputMessageField
 
     signal createNewMessage(string data, string userName)
     property bool isInputEmpty: textField.text.trim().length === 0
+
+    FileDialogExplorer
+    {
+        id: fileExplorer
+    }
 
     Button
     {
@@ -25,10 +32,22 @@ Rectangle
             textField.text = placeholderText.text
         }
     }
+    Button
+    {
+        id: fileButton
+        text: "File"
+        width: sendButton.width
+        height: inputMessageField.height
+        anchors.right: sendButton.left
+        onClicked:
+        {
+            fileExplorer.open()
+        }
+    }
     TextField
     {
         id: textField
-        width: inputMessageField.width - sendButton.width
+        width: inputMessageField.width - sendButton.width * 2
         height: inputMessageField.height
         anchors.left: inputMessageField.left
         font.pointSize: 23

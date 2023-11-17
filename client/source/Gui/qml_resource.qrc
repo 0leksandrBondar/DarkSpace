@@ -9,6 +9,7 @@
         <file>LoginPage/SignUpPage.qml</file>
         <file>LoginPage/SignUpPage.qml</file>
         <file>DialogWindows/NewChatDialogWindow.qml</file>
+        <file>DialogWindows/FileDialogExplorer.qml</file>
         <file>ClientPage/CorrespondenceView/InputMessageField.qml</file>
         <file>ClientPage/CorrespondenceView/CorrespondenceScene.qml</file>
         <file>ClientPage/CorrespondenceView/Message.qml</file>

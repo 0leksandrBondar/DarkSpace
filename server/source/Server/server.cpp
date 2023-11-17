@@ -55,7 +55,7 @@ QTcpSocket* Server::receiverSocket()
 	const bool isAuthType {_dataFromClient->clientDataType() == ClientDataType::SignInType ||
 						   _dataFromClient->clientDataType() == ClientDataType::SignUpType};
 
-	for (const auto* connectedSocket : qAsConst(_sockets))
+	for (const auto* connectedSocket : std::as_const(_sockets))
 	{
 		const bool isDifferentSocket {connectedSocket->_socket != _senderSocket};
 		const bool isSameClientSender {connectedSocket->_socket == _senderSocket};
