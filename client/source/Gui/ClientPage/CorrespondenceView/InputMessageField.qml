@@ -8,12 +8,17 @@ Rectangle
 {
     id: inputMessageField
 
+    signal createNewImageMessage(string path)
     signal createNewMessage(string data, string userName)
+
     property bool isInputEmpty: textField.text.trim().length === 0
 
     FileDialogExplorer
     {
         id: fileExplorer
+        onAccepted: {
+            console.log("You chose: " + fileExplorer.fileUrls)
+        }
     }
 
     Button
