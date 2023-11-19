@@ -5,11 +5,7 @@ FileDialog
 {
     id: fileDialog
     title: "Select file"
-    nameFilters: ["file txt (*.txt)", "all files(*)"]
-    onAccepted:
-    {
-        console.log("Selected file: " + fileDialog.fileUrl)
-    }
+    nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
     onRejected:
     {
         console.log("Reject file selection")

@@ -13,6 +13,7 @@
         <file>ClientPage/CorrespondenceView/InputMessageField.qml</file>
         <file>ClientPage/CorrespondenceView/CorrespondenceScene.qml</file>
         <file>ClientPage/CorrespondenceView/Message.qml</file>
+        <file>ClientPage/CorrespondenceView/ImageMessage.qml</file>
         <file>ClientPage/CorrespondenceView/CorrespondenceView.qml</file>
         <file>ClientPage/CorrespondenceView/ReceiverInfoBar.qml</file>
         <file>ClientPage/ChatListView/ChatBlock.qml</file>
