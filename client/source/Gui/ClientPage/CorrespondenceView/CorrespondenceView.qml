@@ -9,7 +9,7 @@ Rectangle {
     }
 
     CorrespondenceScene {
-        id: correspondenceView
+        id: correspondenceScene
         height: parent.height - receiverInfoBar.height
         anchors.top: receiverInfoBar.bottom
     }
@@ -22,8 +22,13 @@ Rectangle {
         Connections {
             target: messageField
 
-            function onCreateNewMessage(data, userName) {
-                correspondenceView.addNewMessage(data, userName)
+            function onCreateNewMessage(data, userName)
+            {
+                correspondenceScene.addNewMessage(data, userName)
+            }
+            function onCreateNewImageMessage(path)
+            {
+                correspondenceScene.addNewImageMessage(path)
             }
         }
     }

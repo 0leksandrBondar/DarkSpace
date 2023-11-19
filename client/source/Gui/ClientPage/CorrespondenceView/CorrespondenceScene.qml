@@ -5,8 +5,10 @@ Rectangle
     id: correspondenceScene
 
     property var message: null
+    property var imageMessage: null
+    property string prefix : "file:"
 
-    function addNewMessage(data, userName)
+        function addNewMessage(data, userName)
     {
         if(message == null)
         {
@@ -19,6 +21,21 @@ Rectangle
                 flickableContent.contentY = messageList.height - flickableContent.height;
             }
             message = null
+        }
+    }
+    function addNewImageMessage(path)
+    {
+        if(imageMessage == null)
+        {
+            console.log(" 0 " + prefix + path)
+            var component = Qt.createComponent("ImageMessage.qml")
+            imageMessage = component.createObject(messageList)
+            if(imageMessage !== null)
+            {
+                imageMessage.pathToImage = prefix + path
+                flickableContent.contentY = messageList.height - flickableContent.height;
+            }
+            imageMessage = null
         }
     }
 

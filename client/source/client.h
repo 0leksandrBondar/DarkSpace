@@ -22,7 +22,7 @@ signals:
     void getMessageFromServer(const QString& data, const QString& userName);
 
 public slots:
-    QString userName() const;
+    [[nodiscard]] QString userName() const;
     void setUsername(const QString& newUsername);
     void setReceiver(const QString& receiver);
 
@@ -41,7 +41,7 @@ public slots:
 
 private:
     void processingClientDataFromServer(ClientDataType type);
-    bool isReceiverExist(const QString& receiver) const;
+    [[nodiscard]] bool isReceiverExist(const QString& receiver) const;
 
 private:
     QString _receiver;
