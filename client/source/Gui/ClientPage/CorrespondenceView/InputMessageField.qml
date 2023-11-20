@@ -16,8 +16,9 @@ Rectangle
     FileDialogExplorer
     {
         id: fileExplorer
-        onAccepted: {
-            console.log("You chose: " + fileExplorer.fileUrls)
+        onAccepted:
+        {
+            createNewImageMessage(fileExplorer.currentFile.toString().replace("file:///",""))
         }
     }
 
