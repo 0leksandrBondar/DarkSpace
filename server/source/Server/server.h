@@ -12,37 +12,39 @@ class DBManager;
 
 struct ClientInfo
 {
-	QString _userName;
-	QTcpSocket* _socket;
+    QString _userName;
+    QTcpSocket* _socket;
 };
 
 class Server : public QTcpServer
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	Server();
-	~Server();
+    Server();
+    ~Server() override;
 
 private:
-	void onReadyRead();
-	QTcpSocket* receiverSocket();
-	void socketIdentificationDuringAuth();
-	void sendToClient(const ClientData* data);
-	void incomingConnection(qintptr socketDescriptor) override;
+    void onReadyRead();
+    QTcpSocket* receiverSocket();
+    void socketIdentificationDuringAuth();
+    void sendToClient(const ClientData* data);
+    void incomingConnection(qintptr socketDescriptor) override;
 
 private:
-	//  ------- processing data from client
-	void processingClientDataFromClient();
+    //  ------- processing data from client
+    void processingClientDataFromClient();
 
-	void processingSingInType();
-	void processingSearchType();
-	void processingSingUpType();
-	void processingMessageType();
+    void processingSingInType();
+    void processingSearchType();
+    void processingSingUpType();
+    void processingMessageType();
+
+    void onDisconnected();
 
 private:
-	DBManager* _db;
-	QByteArray _data;
-	QTcpSocket* _senderSocket;
-	ClientData* _dataFromClient;
-	std::vector<ClientInfo*> _sockets;
+    DBManager* _db;
+    QByteArray _data;
+    QTcpSocket* _senderSocket{};
+    ClientData* _dataFromClient;
+    std::vector<ClientInfo*> _sockets;
 };
