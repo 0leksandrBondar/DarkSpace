@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 set(SOURCES
         main.cpp
         client.cpp
@@ -10,8 +14,6 @@ set(SOURCES
 set(HEADERS
         client.h)
 
-find_package(Qt6 COMPONENTS Core Quick Network QuickControls2 REQUIRED)
-
 include(IconMaker.cmake)
 add_icon()
 
@@ -19,8 +21,6 @@ add_executable(${PROJECT_NAME} ${APP_TYPE} ${SOURCES} ${APP_ICON} ${HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
-        Qt6::Core
-        Qt6::Network
-        Qt6::Quick
+        Qt
         ClientData
 )

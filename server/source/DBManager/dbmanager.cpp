@@ -1,6 +1,6 @@
 #include "dbmanager.h"
 
-#include "ClientData/clientdata.h"
+#include "clientdata.h"
 
 #include <QSqlDatabase>
 #include <QSqlError>

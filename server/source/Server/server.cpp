@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QTcpSocket>
+#include <QDataStream>
 
 Server::Server() : _db {new DBManager(this)}, _dataFromClient {new ClientData}
 {
@@ -41,7 +42,7 @@ void Server::onReadyRead()
 	input >> *_dataFromClient;
 
 	socketIdentificationDuringAuth();
-	processingClientDataFromClient();
+    processingClientDataFromClient();
 }
 
 /*!
