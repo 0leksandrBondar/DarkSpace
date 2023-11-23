@@ -69,7 +69,7 @@ StackView {
         function onRecivedSignUpRequestStatus(status) {
             console.log(" QML = onRecivedSignUpRequestStatus")
             if (status) {
-                console.log("SingUp request is successful! Welcome")
+                console.log("SignUp request is successful! Welcome")
                 stackPagesView.push(clientPage)
             } else {
                 stackPagesView.push(wrongPage)
@@ -78,7 +78,7 @@ StackView {
 
         function onRecivedSignInRequestStatus(status) {
             if (status) {
-                console.log("SingIn request is successful! Welcome")
+                console.log("SignIn request is successful! Welcome")
                 stackPagesView.push(clientPage)
             } else {
                 stackPagesView.push(wrongPage)

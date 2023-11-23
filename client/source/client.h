@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ClientData/clientdata.h"
+#include "clientdata.h"
 
 #include <QObject>
 
